@@ -110,7 +110,8 @@ async function profile(req, res) {
 			.populate("author")
 			.limit(20)
 			.sort({ date: -1 });
-		res.render("profile", { user, tweets, moment });
+		// res.render("profile", { user, tweets, moment });
+		res.json({ user, tweets });
 	}
 }
 
