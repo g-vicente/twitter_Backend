@@ -1,0 +1,34 @@
+const express = require("express");
+const publicRouter = express.Router();
+const moment = require("moment");
+const Tweet = require("../models/Tweet");
+const User = require("../models/User");
+const { checkSession } = require("../middleware/authMiddleware");
+const userController = require("../controllers/userController");
+const authController = require("../controllers/authController");
+// Rutas del Públicas:
+const registroFail = false;
+publicRouter.get("/login", (req, res) => {
+	res.render("signIn");
+});
+publicRouter.get("/logout", authController.logout);
+publicRouter.get("/signup", (req, res) => {
+	res.render("signUp", { registroFail });
+});
+
+publicRouter.get("/", checkSession, async (req, res) => {
+	const tweets = await Tweet.find({
+		$or: [{ author: { $in: req.user.following } }, { author: req.user._id }],
+	})
+		.populate("author")
+		.limit(20)
+		.sort({ date: -1 });
+	// falta cambiar a tweets de seguidores y limitarlo a 20
+	res.render("dashboard", { tweets, moment });
+});
+publicRouter.get("/index", (req, res) => {
+	res.render("index");
+});
+publicRouter.get("/:username", userController.profile);
+
+module.exports = publicRouter;

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Twitter Clone - Final</title>
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+			integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+			crossorigin="anonymous"
+		/>
+		<link rel="stylesheet" href="assets/styles/dashboard.css" />
+	</head>
+	<body>
+		<!-- sidebar starts -->
+		<%- include ("leftPanel") %>
+		<!-- sidebar ends -->
+
+		<!-- feed starts -->
+		<div class="feed">
+			<div class="feed__header">
+				<h2>Home</h2>
+			</div>
+
+			<!-- tweetbox starts -->
+			<div class="tweetBox">
+				<form action="/create" method="POST">
+					<div class="tweetbox__input">
+						<img
+							src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
+							alt=""
+						/>
+						<input type="text" name="content" placeholder="What's happening?" />
+					</div>
+					<button type="submit" class="tweetBox__tweetButton">Tweet</button>
+				</form>
+			</div>
+			<!-- tweetbox ends -->
+
+			<!-- Tweets -->
+			<% tweets.forEach(tweet => { %>
+			<!-- post starts -->
+			<div class="post">
+				<div class="post__avatar">
+					<img src="<%=tweet.author.photo%>" alt="Foto autor del Tweet" />
+				</div>
+
+				<div class="post__body">
+					<div class="post__header">
+						<div class="post__headerText">
+							<h3>
+								<a href="/<%=tweet.author.username%>"><%=tweet.author.firstname%></a>
+								<span class="post__headerSpecial"
+									><span class="material-icons post__badge">
+										verified <a href="/<%=tweet.author.username%>"></span
+									>@<%=tweet.author.username%></span
+								></a>
+								<span class="date"
+									><% if
+									(!moment(tweet.date).isBefore(moment().startOf("day")))
+									{ %> <%= moment(tweet.date, "YYYYMMDD").fromNow(); %>
+									<% } else { %> <%= moment(tweet.date ,
+									"YYYYMMDD").format("MMM Do YY"); %> <% } %>
+								</span>
+							</h3>
+						</div>
+						<div class="post__headerDescription">
+							<p><%= tweet.content %></p>
+						</div>
+					</div>
+					<div class="post__footer d-flex align-items-center">
+						<span class="material-icons"> repeat </span>
+						<div class=" ">
+							<%if (loggedUser) {%> <% if(!loggedUser.tweetsLiked.some(arrVal =>
+							tweet.id=== arrVal.toString() )){%>
+							<a href="/like/<%=tweet.id%>">
+								<i class="material-icons unliked-tweet align-bottom">
+									favorite_border
+								</i></a
+							><span class="align-top"><%= tweet.likes %></span><%}else{%>
+							<a href="/unlike/<%=tweet.id%>">
+								<i class="material-icons liked-tweet align-bottom"> favorite </i></a
+							> <span class="align-top"><%= tweet.likes %></span>
+							<%}%><%}else{%>
+							<i class="material-icons align-bottom"> favorite_border </i> <span class="align-top"><%= tweet.likes %></span><% }%>
+						</div>
+						<span class="material-icons"> publish </span>
+					</div>
+				</div>
+			</div>
+			<!-- post ends -->
+			<% }) %>
+		</div>
+		<!-- feed ends -->
+
+		<!-- widgets starts -->
+		<%- include("rightPanel") %>
+		<!-- widgets ends -->
+	</body>
+</html>

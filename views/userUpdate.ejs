@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/assets/styles/signup.css" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div class="ruban">
+      <div class="inner-content">
+        <div class="logo">
+          <a href="/login">
+            <i class="fab fa-twitter"></i>
+            Log In
+          </a>
+        </div>
+        <div>About</div>
+      </div>
+    </div>
+
+    <div id="sign-up">
+      <div class="logo">
+        <a href="index.html">
+          <i class="fab fa-twitter fa-2x"></i>
+        </a>
+      </div>
+      <form action="/userUpdate/<%=loggedUser.id%>" method="POST" enctype="multipart/form-data">
+        <label for="photo">Profile Picture</label>
+        <div class="row">
+          <div class="col-2"></div>
+          <div class="col-10">
+            <div class="form-group">
+              <div class="custom-file">
+                <input
+                type="file"
+                class="custom-file-input"
+                name="photo"
+                id="photo"
+                />
+                <label class="custom-file-label" for="photo"
+                >Choose file</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="backgroundPhoto">Background Picture</label>
+            <div class="form-group">
+              <div class="custom-file">
+                <input
+                  type="file"
+                  class="custom-file-input"
+                  name="backgroundPhoto"
+                />
+                <label class="custom-file-label" for="backgroundPhoto"
+                  >Choose file</label
+        </div>
+
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="firstname"
+            id="firstname"
+            value="<%= user.firstname %>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="lastname"
+            name="lastname"
+            value="<%= user.lastname %>"
+          />
+        </div>      
+        <div class="form-group">
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            type="text"
+            class="form-control"
+            id="description"
+            name="description"
+            placeholder="Description"
+            cols="30"
+            rows="10"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

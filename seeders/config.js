@@ -1,0 +1,6 @@
+module.exports = {
+	SEEDER_USERS: 50,
+	SEEDER_TWEETS: 100,
+	SEEDER_FOLLOW: 100,
+	SEEDER_NEW_USER: 5,
+};
