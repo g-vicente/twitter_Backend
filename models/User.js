@@ -49,6 +49,7 @@ const schema = new Schema({
 		type: Number,
 		default: 0,
 	},
+	token: { type: String },
 });
 
 schema.pre("validate", async function save(next) {

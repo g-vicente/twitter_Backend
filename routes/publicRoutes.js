@@ -3,7 +3,7 @@ const publicRouter = express.Router();
 const moment = require("moment");
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
-const { checkSession } = require("../middleware/authMiddleware");
+const checkSession = require("../middleware/authMiddleware");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 // Rutas del Públicas:
