@@ -9,6 +9,6 @@ module.exports = {
   // Ruta inicio de sesion POST
   logout: (req, res) => {
     req.logout();
-    res.redirect("/index");
+    res.json(req.user);
   },
 };
