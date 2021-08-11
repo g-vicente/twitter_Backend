@@ -15,8 +15,18 @@ processRouter.post("/usercreate", userController.create);
 
 //processRouter.use(checkSession);
 processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
-processRouter.post("/userUpdate/:id", checkSession, isHimself, userController.update);
-processRouter.get("/userUpdate/:id", checkSession, isHimself, userController.updateUserView);
+processRouter.post(
+  "/userUpdate/:id",
+  checkSession,
+  isHimself,
+  userController.update
+);
+processRouter.get(
+  "/userUpdate/:id",
+  checkSession,
+  isHimself,
+  userController.updateUserView
+);
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
 processRouter.post("/follow/:id", isNotHimself, userController.follow);
 processRouter.post("/unfollow/:id", isNotHimself, userController.unfollow);
@@ -24,7 +34,7 @@ processRouter.post("/unfollow/:id", isNotHimself, userController.unfollow);
 //crud de tweet
 processRouter.post("/create", tweetController.create); //cambiar url a tweets
 processRouter.get("/destroy/:id", isAuthor, tweetController.destroy); //agregar tweet en url
-processRouter.get("/like/:id", tweetController.like);
-processRouter.get("/unlike/:id", tweetController.unlike);
+processRouter.post("/like/:id", tweetController.like);
+processRouter.post("/unlike/:id", tweetController.unlike);
 
 module.exports = processRouter;
