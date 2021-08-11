@@ -18,8 +18,8 @@ processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
 processRouter.post("/userUpdate/:id", checkSession, isHimself, userController.update);
 processRouter.get("/userUpdate/:id", checkSession, isHimself, userController.updateUserView);
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
-processRouter.get("/follow/:id", isNotHimself, userController.follow);
-processRouter.get("/unfollow/:id", isNotHimself, userController.unfollow);
+processRouter.post("/follow/:id", isNotHimself, userController.follow);
+processRouter.post("/unfollow/:id", isNotHimself, userController.unfollow);
 
 //crud de tweet
 processRouter.post("/create", tweetController.create); //cambiar url a tweets
