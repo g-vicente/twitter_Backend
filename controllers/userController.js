@@ -20,7 +20,10 @@ async function create(req, res) {
     if (req.body.newUserSeeder) {
       await seederNewUser(user);
     }
-    const token = jwt.sign({ user_id: user._id, username: user.username }, process.env.TOKEN_KEY);
+    const token = jwt.sign(
+      { user_id: user._id, username: user.username },
+      process.env.TOKEN_KEY
+    );
     user.token = token;
     res.status(200).json(user);
   } catch {
@@ -69,7 +72,11 @@ async function update(req, res) {
 }
 
 async function follow(req, res) {
-  if (!req.user.following.some((following) => req.params.id === following.toString())) {
+  if (
+    !req.user.following.some(
+      (following) => req.params.id === following.toString()
+    )
+  ) {
     await User.findByIdAndUpdate(req.params.id, {
       $push: { followers: req.user.id },
       $inc: { followersCount: 1 },
@@ -78,14 +85,18 @@ async function follow(req, res) {
       $push: { following: req.params.id },
       $inc: { followingCount: 1 },
     });
-    res.redirect(req.get("referer"));
+    res.status(200);
   } else {
-    res.redirect("/");
+    res.status(400);
   }
 }
 
 async function unfollow(req, res) {
-  if (req.user.following.some((following) => req.params.id === following.toString())) {
+  if (
+    req.user.following.some(
+      (following) => req.params.id === following.toString()
+    )
+  ) {
     await User.findByIdAndUpdate(req.params.id, {
       $pull: { followers: req.user.id },
       $inc: { followersCount: -1 },
@@ -103,7 +114,10 @@ async function unfollow(req, res) {
 async function profile(req, res) {
   if (req.path !== "/favicon.ico") {
     const user = await User.findOne({ username: req.params.username });
-    const tweets = await Tweet.find({ author: user._id }).populate("author").limit(20).sort({ date: -1 });
+    const tweets = await Tweet.find({ author: user._id })
+      .populate("author")
+      .limit(20)
+      .sort({ date: -1 });
     // res.render("profile", { user, tweets, moment });
     res.json({ user, tweets });
   }
