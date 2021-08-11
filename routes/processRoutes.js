@@ -11,17 +11,12 @@ const { isNotHimself } = require("../middleware/isNotHimself");
 // login logout
 processRouter.post("/login", authController.login);
 //crud de user
-processRouter.post("/userCreate", userController.create);
+processRouter.post("/usercreate", userController.create);
 
 //processRouter.use(checkSession);
 processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
 processRouter.post("/userUpdate/:id", checkSession, isHimself, userController.update);
-processRouter.get(
-	"/userUpdate/:id",
-	checkSession,
-	isHimself,
-	userController.updateUserView
-);
+processRouter.get("/userUpdate/:id", checkSession, isHimself, userController.updateUserView);
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
 processRouter.get("/follow/:id", isNotHimself, userController.follow);
 processRouter.get("/unfollow/:id", isNotHimself, userController.unfollow);
