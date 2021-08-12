@@ -5,8 +5,8 @@ const followSeeder = require("./followSeeder");
 const connection = require("../dbConnection");
 
 module.exports = async function dbCreate() {
-	// await mongoose.connection.dropDatabase();
-	// await userSeeder();
-	// await tweetSeeder();
-	// await followSeeder();
+  //   await mongoose.connection.dropDatabase();
+  //   await userSeeder();
+  //   await tweetSeeder();
+  //   await followSeeder();
 };
