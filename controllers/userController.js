@@ -28,7 +28,7 @@ async function create(req, res) {
 
 async function destroy(req, res) {
   await User.findByIdAndRemove(req.params.id);
-  res.redirect("/login");
+  res.status(200).json("User deleted");
 }
 
 async function updateUserView(req, res) {
