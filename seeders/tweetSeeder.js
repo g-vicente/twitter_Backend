@@ -11,6 +11,7 @@ module.exports = async () => {
 			content: faker.lorem.sentence(),
 			author: _.sample(users),
 			date: faker.date.past(),
+			likes: 0,
 		});
 		await tweet.save();
 
