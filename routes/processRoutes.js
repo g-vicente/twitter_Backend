@@ -30,8 +30,8 @@ processRouter.post(
 );
 
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
-processRouter.post("/follow/:id", isNotHimself, userController.follow);
-processRouter.post("/unfollow/:id", isNotHimself, userController.unfollow);
+processRouter.post("/follow/:id", checkSession, isNotHimself, userController.follow);
+processRouter.post("/unfollow/:id", checkSession, isNotHimself, userController.unfollow);
 
 //crud de tweet
 processRouter.post("/tweet", token, tweetController.create); //cambiar url a tweets
