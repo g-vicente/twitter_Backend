@@ -18,9 +18,11 @@ async function create(req, res) {
     if (req.body.newUserSeeder) {
       await seederNewUser(user);
     }
-    const token = jwt.sign({ sub: user._id, username: user.username }, process.env.TOKEN_KEY);
-    user.token = token;
-    res.status(200).json(user);
+    const newUser = await User.findById(user.id);
+
+    const token = jwt.sign({ sub: newUser._id, username: newUser.username }, process.env.TOKEN_KEY);
+    newUser.token = token;
+    res.status(200).json(newUser);
   } catch {
     res.status(400);
   }

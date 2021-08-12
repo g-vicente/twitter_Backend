@@ -10,26 +10,26 @@ const authController = require("../controllers/authController");
 const registroFail = false;
 
 publicRouter.get("/login", (req, res) => {
-  res.render("signIn");
+	res.render("signIn");
 });
 publicRouter.get("/logout", authController.logout);
 publicRouter.get("/signup", (req, res) => {
-  res.render("signUp", { registroFail });
+	res.render("signUp", { registroFail });
 });
 
 publicRouter.post("/", checkSession, async (req, res) => {
-  const tweets = await Tweet.find({
-    $or: [{ author: { $in: req.body.following } }, { author: req.body._id }],
-  })
-    .populate("author")
-    .limit(20)
-    .sort({ date: -1 });
-  // falta cambiar a tweets de seguidores y limitarlo a 20
-  res.json({ tweets });
+	const tweets = await Tweet.find({
+		$or: [{ author: { $in: req.body.following } }, { author: req.user.sub }],
+	})
+		.populate("author")
+		.limit(20)
+		.sort({ date: -1 });
+	// falta cambiar a tweets de seguidores y limitarlo a 20
+	res.json({ tweets });
 });
 
 publicRouter.get("/index", (req, res) => {
-  res.render("index");
+	res.render("index");
 });
 publicRouter.get("/:username", userController.profile);
 
