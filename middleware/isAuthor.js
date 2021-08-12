@@ -2,7 +2,7 @@ const Tweet = require("../models/Tweet");
 
 module.exports = {
 	isAuthor: async (req, res, next) => {
-		const tweet = await Tweet.findById(req.params.id);
+		const tweet = await Tweet.findById(req.body._id);
 		if (req.user.sub === tweet.author._id.toString()) {
 			next();
 		} else {
