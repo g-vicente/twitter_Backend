@@ -1,7 +1,5 @@
 const User = require("../models/User");
 const Tweet = require("../models/Tweet");
-const moment = require("moment");
-const passport = require("passport");
 const formidable = require("formidable");
 const seederNewUser = require("../seeders/seederNewUser");
 const jwt = require("jsonwebtoken");

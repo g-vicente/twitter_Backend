@@ -34,7 +34,7 @@ async function like(req, res) {
   await User.findByIdAndUpdate(req.user.id, {
     $push: { tweetsLiked: req.params.id },
   });
-  res.status(200).send("LIKE");
+  res.status(200).json("LIKE");
 }
 
 async function unlike(req, res) {
@@ -44,7 +44,7 @@ async function unlike(req, res) {
   await User.findByIdAndUpdate(req.user.id, {
     $pull: { tweetsLiked: req.params.id },
   });
-  res.status(200).send("UNLIKE");
+  res.status(200).json("UNLIKE");
 }
 
 // Otros handlers...

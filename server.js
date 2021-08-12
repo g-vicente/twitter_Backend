@@ -9,16 +9,12 @@ const routes = require("./routes/index");
 const dbCreate = require("./seeders/index")();
 
 const dbConnection = require("./dbConnection");
-const passport = require("./config/passport");
-const sessions = require("./config/sessions");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-sessions(app);
-passport(app);
 dbConnection();
 
 routes(app);
