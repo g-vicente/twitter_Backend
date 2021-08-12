@@ -18,7 +18,10 @@ async function create(req, res) {
     if (req.body.newUserSeeder) {
       await seederNewUser(user);
     }
-    const token = jwt.sign({ sub: user._id, username: user.username }, process.env.TOKEN_KEY);
+    const token = jwt.sign(
+      { sub: user._id, username: user.username },
+      process.env.TOKEN_KEY
+    );
     user.token = token;
     res.status(200).json(user);
   } catch {
@@ -31,43 +34,46 @@ async function destroy(req, res) {
   res.status(200).json("User deleted");
 }
 
-async function updateUserView(req, res) {
-  const user = await User.findById(req.params.id);
-  res.render("userUpdate", { user });
-}
-
 async function update(req, res) {
-  const form = formidable({
-    multiples: true,
-    uploadDir: __dirname + "/../public/assets/images",
-    keepExtensions: true,
-  });
-  form.parse(req, async (err, fields, files) => {
-    const path = require("path");
-    const photoName = path.basename(files.photo.path);
-    if (files.photo.name === "") {
-      const fs = require("fs");
-      fs.unlink(files.photo.path, () => {});
-    }
-    const backgroundPhotoName = path.basename(files.backgroundPhoto.path);
-    if (files.backgroundPhoto.name === "") {
-      const fs = require("fs");
-      fs.unlink(files.backgroundPhoto.path, () => {});
-    }
-    const user = await User.findByIdAndUpdate(req.user.id, {
-      photo: "/assets/images/" + photoName,
-      backgroundPhoto: "/assets/images/" + backgroundPhotoName,
-      firstname: fields.firstname,
-      lastname: fields.lastname,
-      description: fields.description,
+  try {
+    /* const form = formidable({
+      multiples: true,
+      uploadDir: __dirname + "/../public/assets/images",
+      keepExtensions: true,
     });
-  });
-
-  res.redirect("/");
+    form.parse(req, async (err, fields, files) => {
+      const path = require("path");
+      const photoName = path.basename(files.photo.path);
+      if (files.photo.name === "") {
+        const fs = require("fs");
+        fs.unlink(files.photo.path, () => {});
+      }
+      const backgroundPhotoName = path.basename(files.backgroundPhoto.path);
+      if (files.backgroundPhoto.name === "") {
+        const fs = require("fs");
+        fs.unlink(files.backgroundPhoto.path, () => {});
+      } */
+    await User.findByIdAndUpdate(req.user.sub, {
+      /*  photo: "/assets/images/" + photoName,
+        backgroundPhoto: "/assets/images/" + backgroundPhotoName, */
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      description: req.body.description,
+    });
+    /* }); */
+    const user = await User.findById(req.user.sub); // Con findByIdAndUpdate retorna el user antes del cambio.
+    res.status(200).json(user);
+  } catch {
+    res.status(400);
+  }
 }
 
 async function follow(req, res) {
-  if (!req.body.following.some((following) => req.params.id === following.toString())) {
+  if (
+    !req.body.following.some(
+      (following) => req.params.id === following.toString()
+    )
+  ) {
     await User.findByIdAndUpdate(req.params.id, {
       $push: { followers: req.body.id },
       $inc: { followersCount: 1 },
@@ -86,7 +92,11 @@ async function follow(req, res) {
 // }
 
 async function unfollow(req, res) {
-  if (req.body.following.some((following) => req.params.id === following.toString())) {
+  if (
+    req.body.following.some(
+      (following) => req.params.id === following.toString()
+    )
+  ) {
     await User.findByIdAndUpdate(req.params.id, {
       $pull: { followers: req.body.id },
       $inc: { followersCount: -1 },
@@ -105,7 +115,10 @@ async function unfollow(req, res) {
 async function profile(req, res) {
   if (req.path !== "/favicon.ico") {
     const user = await User.findOne({ username: req.params.username });
-    const tweets = await Tweet.find({ author: user._id }).populate("author").limit(20).sort({ date: -1 });
+    const tweets = await Tweet.find({ author: user._id })
+      .populate("author")
+      .limit(20)
+      .sort({ date: -1 });
     // res.render("profile", { user, tweets, moment });
     res.json({ user, tweets });
   }
@@ -115,7 +128,6 @@ module.exports = {
   create,
   destroy,
   update,
-  updateUserView,
   follow,
   unfollow,
   profile,

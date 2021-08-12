@@ -8,7 +8,10 @@ const { isAuthor } = require("../middleware/isAuthor");
 const { isHimself } = require("../middleware/isHimself");
 const { isNotHimself } = require("../middleware/isNotHimself");
 const checkJwt = require("express-jwt");
-const token = checkJwt({ secret: process.env.TOKEN_KEY, algorithms: ["HS256"] });
+const token = checkJwt({
+  secret: process.env.TOKEN_KEY,
+  algorithms: ["HS256"],
+});
 
 // login logout
 processRouter.post("/login", authController.login);
@@ -17,18 +20,15 @@ processRouter.post("/usercreate", userController.create);
 
 //processRouter.use(checkSession);
 processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
+
 processRouter.post(
-  "/userUpdate/:id",
-  checkSession,
-  isHimself,
+  "/userupdate",
+  token,
+  /* checkSession,
+  isHimself, */
   userController.update
 );
-processRouter.get(
-  "/userUpdate/:id",
-  checkSession,
-  isHimself,
-  userController.updateUserView
-);
+
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
 processRouter.post("/follow/:id", isNotHimself, userController.follow);
 processRouter.post("/unfollow/:id", isNotHimself, userController.unfollow);
