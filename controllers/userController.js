@@ -18,10 +18,7 @@ async function create(req, res) {
     if (req.body.newUserSeeder) {
       await seederNewUser(user);
     }
-    const token = jwt.sign(
-      { sub: user._id, username: user.username },
-      process.env.TOKEN_KEY
-    );
+    const token = jwt.sign({ sub: user._id, username: user.username }, process.env.TOKEN_KEY);
     user.token = token;
     res.status(200).json(user);
   } catch {
@@ -69,57 +66,45 @@ async function update(req, res) {
 }
 
 async function follow(req, res) {
-  if (
-    !req.body.following.some(
-      (following) => req.params.id === following.toString()
-    )
-  ) {
+  const user = await User.findById(req.user.sub);
+  if (!user.following.some((following) => req.params.id === following.toString())) {
     await User.findByIdAndUpdate(req.params.id, {
-      $push: { followers: req.body.id },
+      $push: { followers: req.user.sub },
       $inc: { followersCount: 1 },
     });
-    const user = await User.findByIdAndUpdate(req.body.id, {
+    await User.findByIdAndUpdate(req.user.sub, {
       $push: { following: req.params.id },
       $inc: { followingCount: 1 },
     });
-    res.status(200).json(user.following);
-    // res.redirect(req.get("referer"));
+    const userEdited = await User.findById(req.user.sub);
+    res.status(200).json(userEdited.following);
   } else {
-    res.status(400);
+    res.status(400).json("Ya sigues a esta persona");
   }
-  // res.redirect("/");
 }
-// }
 
 async function unfollow(req, res) {
-  if (
-    req.body.following.some(
-      (following) => req.params.id === following.toString()
-    )
-  ) {
+  const user = await User.findById(req.user.sub);
+  if (user.following.some((following) => req.params.id === following.toString())) {
     await User.findByIdAndUpdate(req.params.id, {
-      $pull: { followers: req.body.id },
+      $pull: { followers: req.user.sub },
       $inc: { followersCount: -1 },
     });
-    const user = await User.findByIdAndUpdate(req.body.id, {
+    await User.findByIdAndUpdate(req.user.sub, {
       $pull: { following: req.params.id },
       $inc: { followingCount: -1 },
     });
-    res.status(200).json(user.following);
-    // res.redirect(req.get("referer"));
+    const userEdited = await User.findById(req.user.sub);
+    res.status(200).json(userEdited.following);
   } else {
-    res.status(400);
+    res.status(400).json("No sigues a esta persona");
   }
 }
 
 async function profile(req, res) {
   if (req.path !== "/favicon.ico") {
     const user = await User.findOne({ username: req.params.username });
-    const tweets = await Tweet.find({ author: user._id })
-      .populate("author")
-      .limit(20)
-      .sort({ date: -1 });
-    // res.render("profile", { user, tweets, moment });
+    const tweets = await Tweet.find({ author: user._id }).populate("author").limit(20).sort({ date: -1 });
     res.json({ user, tweets });
   }
 }
