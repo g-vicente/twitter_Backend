@@ -104,11 +104,9 @@ async function unfollow(req, res) {
 }
 
 async function profile(req, res) {
-  if (req.path !== "/favicon.ico") {
-    const user = await User.findOne({ username: req.params.username });
-    const tweets = await Tweet.find({ author: user._id }).populate("author").limit(20).sort({ date: -1 });
-    res.json({ user, tweets });
-  }
+  const user = await User.findOne({ username: req.params.username });
+  const tweets = await Tweet.find({ author: user._id }).populate("author").limit(20).sort({ date: -1 });
+  res.json({ user, tweets });
 }
 
 module.exports = {
