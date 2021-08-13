@@ -18,14 +18,19 @@ publicRouter.get("/signup", (req, res) => {
 });
 
 publicRouter.post("/", checkSession, async (req, res) => {
+	const page = req.body.page;
+	const totalTweets = await Tweet.find({
+		$or: [{ author: { $in: req.body.following } }, { author: req.user.sub }],
+	}).countDocuments();
+	const totalPages = Math.ceil(totalTweets / 20);
 	const tweets = await Tweet.find({
 		$or: [{ author: { $in: req.body.following } }, { author: req.user.sub }],
 	})
 		.populate("author")
-		.limit(20)
+		.limit(20 * page)
 		.sort({ date: -1 });
 	// falta cambiar a tweets de seguidores y limitarlo a 20
-	res.json({ tweets });
+	res.json({ tweets, totalPages });
 });
 
 publicRouter.get("/index", (req, res) => {
