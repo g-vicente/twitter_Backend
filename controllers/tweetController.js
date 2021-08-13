@@ -22,7 +22,7 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
-  await Tweet.findByIdAndRemove(req.user.sub);
+  await Tweet.findByIdAndRemove(req.body._id);
   res.status(200).json({ ok: "Ok delete" });
 }
 
@@ -30,7 +30,6 @@ async function like(req, res) {
   await Tweet.findByIdAndUpdate(req.params.id, {
     $inc: { likes: 1 },
   });
-  console.log(req.params.id);
   const user = await User.findByIdAndUpdate(req.user.sub, {
     $push: { tweetsLiked: req.params.id },
   });

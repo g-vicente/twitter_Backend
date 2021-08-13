@@ -27,7 +27,6 @@ async function login(req, res) {
     const user = await User.findOne({
       $or: [{ email: username }, { username: username }],
     });
-    console.log(await user.validPassword(password));
     if (await user.validPassword(password)) {
       // Create token
       const token = jwt.sign({ sub: user._id, username: username }, process.env.TOKEN_KEY);
