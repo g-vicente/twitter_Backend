@@ -22,7 +22,7 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
-  await Tweet.findByIdAndRemove(req.body._id);
+  await Tweet.findByIdAndRemove(req.user.sub);
   res.status(200).json({ ok: "Ok delete" });
 }
 
