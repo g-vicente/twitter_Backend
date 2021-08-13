@@ -35,8 +35,8 @@ processRouter.post("/unfollow/:id", token, isNotHimself, userController.unfollow
 
 //crud de tweet
 processRouter.post("/tweet", token, tweetController.create); //cambiar url a tweets
-processRouter.delete("/tweet", checkSession, isAuthor, tweetController.destroy); //agregar tweet en url
-processRouter.post("/like/:id", tweetController.like);
-processRouter.post("/unlike/:id", tweetController.unlike);
+processRouter.delete("/tweet", token, checkSession, isAuthor, tweetController.destroy); //agregar tweet en url
+processRouter.post("/like/:id", token, tweetController.like);
+processRouter.post("/unlike/:id", token, tweetController.unlike);
 
 module.exports = processRouter;
