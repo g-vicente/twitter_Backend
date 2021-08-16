@@ -32,7 +32,7 @@ async function create(req, res) {
 }
 
 async function destroy(req, res) {
-	await User.findByIdAndRemove(req.params.id);
+	await User.findByIdAndRemove(req.user.sub);
 	res.status(200).json("User deleted");
 }
 
@@ -84,13 +84,6 @@ async function follow(req, res) {
 		const userEdited = await User.findById(req.user.sub);
 		res.status(200).json(userEdited.following);
 	} else {
-		res.status(400).json("Ya sigues a esta persona");
-	}
-}
-
-async function unfollow(req, res) {
-	const user = await User.findById(req.user.sub);
-	if (user.following.some((following) => req.params.id === following.toString())) {
 		await User.findByIdAndUpdate(req.params.id, {
 			$pull: { followers: req.user.sub },
 			$inc: { followersCount: -1 },
@@ -101,8 +94,6 @@ async function unfollow(req, res) {
 		});
 		const userEdited = await User.findById(req.user.sub);
 		res.status(200).json(userEdited.following);
-	} else {
-		res.status(400).json("No sigues a esta persona");
 	}
 }
 
@@ -120,6 +111,5 @@ module.exports = {
 	destroy,
 	update,
 	follow,
-	unfollow,
 	profile,
 };

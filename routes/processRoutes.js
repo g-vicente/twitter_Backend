@@ -17,29 +17,14 @@ const token = checkJwt({
 // login logout
 processRouter.post("/login", authController.login);
 //crud de user
-processRouter.post("/usercreate", userController.create);
-
-//processRouter.use(checkSession);
-processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
-
-processRouter.post(
-	"/userupdate",
-	token,
-	/* checkSession,
-  isHimself, */
-	userController.update
-);
-
-//processRouter.get("/userUpdate/:id", userController.updateUserView);
-
-processRouter.post("/follow/:id", token, isNotHimself, userController.follow);
-processRouter.post("/unfollow/:id", token, isNotHimself, userController.unfollow);
+processRouter.post("/user", userController.create);
+processRouter.delete("/user", isHimself, userController.destroy);
+processRouter.post("/userupdate", token, isHimself, userController.update);
+processRouter.patch("/follow/:id", token, isNotHimself, userController.follow);
 
 //crud de tweet
-processRouter.post("/tweet", token, tweetController.create); //cambiar url a tweets
-processRouter.delete("/tweet", token, isAuthor, tweetController.destroy); //agregar tweet en url
+processRouter.post("/tweet", token, tweetController.create);
+processRouter.delete("/tweet", token, isAuthor, tweetController.destroy);
 processRouter.patch("/tweet/:id", token, tweetController.like);
-
-// processRouter.post("/unlike/:id", token, tweetController.like);
 
 module.exports = processRouter;
