@@ -35,12 +35,12 @@ publicRouter.post("/", token, async (req, res) => {
 	const tweets = await Tweet.find({
 		$or: [{ author: { $in: req.body.following } }, { author: req.user.sub }],
 	})
-		.populate("author")
+		.populate({ path: "author", select: "_id username firstname lastname photo" })
 		.limit(20 * page)
 		.sort({ date: -1 });
 	res.json({ tweets, totalPages });
 });
 
-publicRouter.get("/:username", userController.profile);
+publicRouter.get("/user/:username", userController.profile);
 
 module.exports = publicRouter;

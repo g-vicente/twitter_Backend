@@ -98,12 +98,18 @@ async function follow(req, res) {
 }
 
 async function profile(req, res) {
-	const user = await User.findOne({ username: req.params.username });
-	const tweets = await Tweet.find({ author: user._id })
-		.populate("author")
-		.limit(20)
-		.sort({ date: -1 });
-	res.json({ user, tweets });
+	try {
+		const user = await User.findOne({ username: req.params.username }).select(
+			"-password"
+		);
+		const tweets = await Tweet.find({ author: user._id })
+			.populate({ path: "author", select: "_id username firstname lastname photo" })
+			.limit(20)
+			.sort({ date: -1 });
+		res.json({ user, tweets });
+	} catch {
+		res.status(400).send("Error: Usuario no encontrado");
+	}
 }
 
 module.exports = {
