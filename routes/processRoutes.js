@@ -10,8 +10,8 @@ const { isNotHimself } = require("../middleware/isNotHimself");
 const checkJwt = require("express-jwt");
 
 const token = checkJwt({
-	secret: process.env.TOKEN_KEY,
-	algorithms: ["HS256"],
+  secret: process.env.TOKEN_KEY,
+  algorithms: ["HS256"],
 });
 
 // login logout
@@ -19,7 +19,7 @@ processRouter.post("/login", authController.login);
 //crud de user
 processRouter.post("/user", userController.create);
 processRouter.delete("/user", isHimself, userController.destroy);
-processRouter.post("/userupdate", token, isHimself, userController.update);
+processRouter.patch("/user", token, userController.update);
 processRouter.patch("/follow/:id", token, isNotHimself, userController.follow);
 
 //crud de tweet
