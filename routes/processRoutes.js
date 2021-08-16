@@ -8,9 +8,10 @@ const { isAuthor } = require("../middleware/isAuthor");
 const { isHimself } = require("../middleware/isHimself");
 const { isNotHimself } = require("../middleware/isNotHimself");
 const checkJwt = require("express-jwt");
+
 const token = checkJwt({
-  secret: process.env.TOKEN_KEY,
-  algorithms: ["HS256"],
+	secret: process.env.TOKEN_KEY,
+	algorithms: ["HS256"],
 });
 
 // login logout
@@ -22,21 +23,23 @@ processRouter.post("/usercreate", userController.create);
 processRouter.get("/userDestroy/:id", isHimself, userController.destroy);
 
 processRouter.post(
-  "/userupdate",
-  token,
-  /* checkSession,
+	"/userupdate",
+	token,
+	/* checkSession,
   isHimself, */
-  userController.update
+	userController.update
 );
 
 //processRouter.get("/userUpdate/:id", userController.updateUserView);
+
 processRouter.post("/follow/:id", token, isNotHimself, userController.follow);
 processRouter.post("/unfollow/:id", token, isNotHimself, userController.unfollow);
 
 //crud de tweet
 processRouter.post("/tweet", token, tweetController.create); //cambiar url a tweets
-processRouter.delete("/tweet", token, checkSession, isAuthor, tweetController.destroy); //agregar tweet en url
-processRouter.post("/like/:id", token, tweetController.like);
-processRouter.post("/unlike/:id", token, tweetController.unlike);
+processRouter.delete("/tweet", token, isAuthor, tweetController.destroy); //agregar tweet en url
+processRouter.patch("/tweet/:id", token, tweetController.like);
+
+// processRouter.post("/unlike/:id", token, tweetController.like);
 
 module.exports = processRouter;
