@@ -33,9 +33,10 @@ async function login(req, res) {
 				{ sub: user._id, username: username },
 				process.env.TOKEN_KEY
 			);
-			user.token = token;
+			const newUser = await User.findById(user._id).select("-password");
+			newUser.token = token;
 
-			res.status(200).json(user);
+			res.status(200).json(newUser);
 		}
 		res.status(400).send("Invalid Credentials");
 	} catch (err) {
