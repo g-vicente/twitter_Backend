@@ -19,7 +19,7 @@ processRouter.post("/login", authController.login);
 //crud de user
 processRouter.post("/user", userController.create);
 processRouter.delete("/user", isHimself, userController.destroy);
-processRouter.patch("/user", token, userController.update);
+processRouter.post("/users", token, userController.update);
 processRouter.patch("/follow/:id", token, isNotHimself, userController.follow);
 
 //crud de tweet

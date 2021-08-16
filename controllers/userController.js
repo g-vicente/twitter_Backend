@@ -37,14 +37,16 @@ async function destroy(req, res) {
 }
 
 async function update(req, res) {
-  console.log(req.data);
   try {
+    console.log(12312);
     const form = formidable({
       multiples: true,
       uploadDir: __dirname + "/../public/assets/images",
       keepExtensions: true,
     });
     form.parse(req, async (err, fields, files) => {
+      console.log(fields);
+      console.log("hola2");
       const path = require("path");
       const photoName = path.basename(files.photo.path);
       if (files.photo.name === "") {
@@ -63,7 +65,6 @@ async function update(req, res) {
         lastname: fields.lastname,
         description: fields.description,
       });
-      /* }); */
       const user = await User.findById(req.user.sub); // Con findByIdAndUpdate retorna el user antes del cambio.
       res.status(200).json(user);
       res.status(400);
